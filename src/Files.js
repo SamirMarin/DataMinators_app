@@ -6,8 +6,10 @@ import * as filesAPI from './filesAPI'
 
 class Files extends Component {
   state = {
-    files: ['Nothing has been searched'],
-    query: ''
+    files:[],
+    tableName: {},
+    query: '',
+    success: ''
   }
 
   searchQuery = (query) => {
@@ -26,6 +28,31 @@ class Files extends Component {
     }
     this.setState({query: query})
   }
+
+  tableName = (file) => {
+    if(file in this.state.tableName){
+      return this.state.tableName[file]
+    }else{
+      return "Table Name Goes Here"
+    }
+  }
+  handleChangeInTableName = (event, file) => {
+    if(file in this.state.tableName){
+      this.state.tableName = {file: event}
+    }else{
+      this.state.tableName = {file: event}
+    }
+  }
+  handleSubmit = (tableName, file, thepath) => {
+      filesAPI.loadTable(this.state.tableName['file'], thepath, file).then((successMessage) => {
+        if (successMessage.error){
+          this.setState({success : ''})
+        } else{
+          this.setState({success: "table has loaded"})
+        }
+      })
+    }
+  
   render() {
     return (
       <div >
@@ -37,8 +64,28 @@ class Files extends Component {
                   <div>
                   </div>
                 </div>
-                <div>{file}</div>
-                <div>{file}</div>
+                <div>{this.props.thepath}/{file}</div>
+                <form onSubmit ={(e) => this.handleSubmit(this.state.tableName[file], file, this.props.thepath)} >
+                  <div className="comment-form-area">
+                    <div className="">
+                    </div>
+                    <br/>
+                    <div className="form-padding">
+                      <textarea 
+                        className="text-box-area"
+                        placeholder="Table name goes here"
+                        value={this.state.tableName[file]}
+                        onChange={(event) => this.handleChangeInTableName(event.target.value)}
+                      />
+                    </div>
+                    <br/>
+                    <input 
+                      type="submit"
+                      className="author-area"
+                    />
+                  </div>
+                  <br/>
+                </form>
               </div>
             </li>
           ))}

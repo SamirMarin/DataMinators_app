@@ -9,3 +9,7 @@ export const getFilePaths = (path) =>
     .then(res => res.json())
     .then(data => data)
 
+export const loadTable = (tableName, path, file) =>
+  fetch(`${api}/loadTable/${tableName}/${path}/${file}`, { headers })
+    .then(res => res.json())
+    .then(data => data)
