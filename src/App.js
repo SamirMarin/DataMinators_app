@@ -6,7 +6,7 @@ import * as filesAPI from './filesAPI'
 
 class App extends Component {
   state = {
-    folder: {},
+    files: ['Nothing has been searched'],
     query: ''
   }
 
@@ -14,35 +14,36 @@ class App extends Component {
     if(query){
       filesAPI.getFilePaths(query).then((searchPath) => {
         if (searchPath.error){
-          this.setState({folder : {}})
+          this.setState({files : ['nothing has been searched']})
         } else{
-          this.setState({folder: searchPath})
+          this.setState({files: searchPath.files})
         }
       })
 
     }
     else {
-      this.setState({ folder: {} })
+      this.setState({ files: ['nothing has been searched'] })
     }
     this.setState({query: query})
   }
   render() {
     return (
       <div className="App">
-          <Route path="/" render={() => (
-            <div className="list-books-content">
+          <Route path="/search" render={() => (
+            <div className="search-books" onClick={(target) => this.searchQuery(event.target.value)}>
+              <div>
+                <h2>NOW</h2>
+              </div>
               <div className="search-books-bar">
-                <div>
                   <input 
                     type="text" 
                     placeholder="Path to Explore"
                     value={this.state.query}
                     onChange={(event) => this.searchQuery(event.target.value)}
                   />
-                </div>
               </div>
               <div>
-                <h2>HELLO</h2>
+                <h2>{this.state.files[0]}</h2>
               </div>
             </div>
           )}/>
