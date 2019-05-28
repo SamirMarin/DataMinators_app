@@ -1,3 +1,4 @@
+
 .App {
   text-align: center;
 }
@@ -33,6 +34,11 @@ body, .app {
 }
 
 /* main page */
+
+li {
+    display: inline-block;
+    padding: 30pt 30pt;
+}
 
 .list-books-title {
   padding: 10px 0;
