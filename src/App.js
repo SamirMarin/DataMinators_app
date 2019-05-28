@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import './App.css';
 import * as filesAPI from './filesAPI'
+import Files from './Files'
 
 class App extends Component {
   state = {
@@ -45,6 +46,9 @@ class App extends Component {
               <div>
                 <h2>{this.state.files[0]}</h2>
               </div>
+              <Files
+                files={this.state.files}
+              />
             </div>
           )}/>
       </div>
