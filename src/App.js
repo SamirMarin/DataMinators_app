@@ -8,7 +8,8 @@ import Files from './Files'
 class App extends Component {
   state = {
     files: ['Nothing has been searched'],
-    query: ''
+    query: '',
+    thepath: ''
   }
 
   searchQuery = (query) => {
@@ -18,6 +19,7 @@ class App extends Component {
           this.setState({files : ['nothing has been searched']})
         } else{
           this.setState({files: searchPath.files})
+          this.setState({thepath: query})
         }
       })
 
@@ -31,10 +33,13 @@ class App extends Component {
     return (
       <div className="App">
           <Route path="/search" render={() => (
-            <div className="search-books" onClick={(target) => this.searchQuery(event.target.value)}>
+            <div className="search-books">
               <div>
                 <h2>NOW</h2>
               </div>
+              <Link 
+                to="/"
+              >Close</Link>
               <div className="search-books-bar">
                   <input 
                     type="text" 
@@ -43,14 +48,20 @@ class App extends Component {
                     onChange={(event) => this.searchQuery(event.target.value)}
                   />
               </div>
-              <div>
-                <h2>{this.state.files[0]}</h2>
-              </div>
               <Files
                 files={this.state.files}
+                thepath={this.state.thepath}
               />
             </div>
           )}/>
+        <Route exact path="/" render={() => (
+          <div className="list-books">
+              <Files
+                files={this.state.files}
+                thepath={this.state.thepath}
+              />
+          </div>
+        )}/>
       </div>
     );
   }
