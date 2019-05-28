@@ -12,9 +12,10 @@ class App extends Component {
     thepath: ''
   }
 
+
   searchQuery = (query) => {
     if(query){
-      filesAPI.getFilePaths(query).then((searchPath) => {
+      filesAPI.getFilePaths(query.replace(new RegExp('/', 'g'), '+')).then((searchPath) => {
         if (searchPath.error){
           this.setState({files : ['nothing has been searched']})
         } else{

@@ -44,7 +44,7 @@ class Files extends Component {
     }
   }
   handleSubmit = (tableName, file, thepath) => {
-      filesAPI.loadTable(this.state.tableName['file'], thepath, file).then((successMessage) => {
+    filesAPI.loadTable(this.state.tableName['file'], thepath.replace(new RegExp('/', 'g'), '+'), file).then((successMessage) => {
         if (successMessage.error){
           this.setState({success : ''})
         } else{
