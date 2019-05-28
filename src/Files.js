@@ -44,11 +44,13 @@ class Files extends Component {
     }
   }
   handleSubmit = (tableName, file, thepath) => {
+    alert("loading file")
     filesAPI.loadTable(this.state.tableName['file'], thepath.replace(new RegExp('/', 'g'), '+'), file).then((successMessage) => {
         if (successMessage.error){
           this.setState({success : ''})
         } else{
           this.setState({success: "table has loaded"})
+          alert("done loading")
         }
       })
     }
@@ -79,10 +81,9 @@ class Files extends Component {
                       />
                     </div>
                     <br/>
-                    <input 
-                      type="submit"
-                      className="author-area"
-                    />
+                    <dev className="author-area" onClick={(e) => this.handleSubmit(this.state.tableName[file], file, this.props.thepath)}>
+                      <h3> Create </h3>
+                    </dev>
                   </div>
                   <br/>
                 </form>
