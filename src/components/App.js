@@ -37,13 +37,14 @@ class App extends Component {
               <div className="esldata-button">
                 <Link
                   to="/esldata"
-                  onClick={() => this.getTenantFolders("esldata")}
                 >esldata</Link>
               </div>
             </div>
           )}/>
-        <Route exact path="/esldata" render= {() => (
-          <DataFolder/>
+        <Route exact path="/:dataFolder" render= {(props) => (
+          <DataFolder
+            dataFolder={props.match.params.dataFolder}
+          />
         )}/>
     </Switch>
       </div>
