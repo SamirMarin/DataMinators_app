@@ -18,7 +18,7 @@ class DataFolder extends Component {
           alert("Error getting folders")
         } else {
           for (var i = 0, len = folders.dir.length; i < len; i++) {
-            this.props.addFolder({folderName: folders.dir[i]})
+            this.props.addFolder({ folderName: this.props.dataFolder, tenantFolderName: folders.dir[i] })
           }
         }
       })
@@ -55,9 +55,15 @@ function mapDispatchToProps( dispatch ) {
   }
 }
 
-function mapStateToProps({ fileSystem }) {
-  return {
-    folders: [...Object.keys(fileSystem)]
+function mapStateToProps({ fileSystem }, props) {
+  if (props.dataFolder && (props.dataFolder in fileSystem)) {
+    return {
+      folders: [...Object.keys(fileSystem[props.dataFolder])]
+    }
+  } else {
+    return {
+      folders: []
+    }
   }
 }
 

@@ -9,10 +9,11 @@ export function addFile ({ file }) {
   }
 }
 
-export function addFolder ({ folderName }) {
+export function addFolder ({ folderName, tenantFolderName  }) {
   return {
     type: ADD_FOLDER,
     folderName,
+    tenantFolderName,
   }
 }
 

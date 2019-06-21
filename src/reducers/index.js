@@ -13,10 +13,13 @@ function fileSystem (state={}, action) {
         [folder]: [...state[folder], file] 
       }
     case ADD_FOLDER:
-      const { folderName } = action
+      const { folderName, tenantFolderName } = action
       return {
         ...state,
-        [folderName]: [] 
+        [folderName]: {
+          ...state[folderName],
+          [tenantFolderName]: {}
+        } 
       }
     default:
       return state
