@@ -1,0 +1,32 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  height: 40px;
+  padding:20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+  vertical-align: middle;
+}
+
+.maindata-folder{
+  padding: 30px;
+}
+.esldata-button{
+  background-color: #222;
+  border-radius: 25px;
+  border: none;
+  color: white;
+  padding: 5px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0 auto;
+  font-size: 25px;
+}
+
