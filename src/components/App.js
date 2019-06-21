@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom'
 import '../css/App.css';
 import DataFolder from './DataFolder'
+import TenantDataFolder from './TenantDataFolder'
 import * as helpers from '../utils/helpers'
 import * as api from '../utils/api'
 import { addFolder } from '../actions'
@@ -44,6 +45,12 @@ class App extends Component {
         <Route exact path="/:dataFolder" render= {(props) => (
           <DataFolder
             dataFolder={props.match.params.dataFolder}
+          />
+        )}/>
+      <Route exact path="/:dataFolder/:tenantDataFolder" render= {(props) => (
+          <TenantDataFolder
+            dataFolder={props.match.params.dataFolder}
+            tenantDataFolder={props.match.params.tenantDataFolder}
           />
         )}/>
     </Switch>
