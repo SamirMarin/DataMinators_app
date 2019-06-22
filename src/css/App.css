@@ -48,4 +48,11 @@
   flex-wrap: wrap;
 }
 
+.file-list{
+  font-size: 12px;
+  flex-wrap: none;
+  float: left;
+  display: inline;
+}
+
 

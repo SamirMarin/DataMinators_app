@@ -1,12 +1,15 @@
-export const ADD_FILE = 'ADD_FILE'
+export const ADD_FILES = 'ADD_FILES'
 export const ADD_FOLDER = 'ADD_FOLDER'
 export const ADD_TIMESTAMP_FOLDER = 'ADD_TIMESTAMP_FOLDER'
 
 
-export function addFile ({ file }) {
+export function addFiles ({  folderName, tenantFolderName, timestampFolderName, files }) {
   return {
-    type: ADD_FILE,
-    file,
+    type: ADD_FILES,
+    folderName,
+    tenantFolderName,
+    timestampFolderName,
+    files,
   }
 }
 

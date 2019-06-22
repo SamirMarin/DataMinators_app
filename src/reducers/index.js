@@ -1,18 +1,24 @@
 import { combineReducers } from 'redux'
 import {
-  ADD_FILE,
+  ADD_FILES,
   ADD_FOLDER,
   ADD_TIMESTAMP_FOLDER
 } from '../actions'
 
 function fileSystem (state={}, action) {
-  const { folderName, tenantFolderName } = action
+  const { folderName, tenantFolderName, timestampFolderName } = action
   switch (action.type) {
-    case ADD_FILE:
-      const { folder, file } = action
+    case ADD_FILES:
+      const { files } = action
       return {
         ...state,
-        [folder]: [...state[folder], file] 
+        [folderName]: {
+          ...state[folderName],
+          [tenantFolderName]: {
+            ...state[folderName][tenantFolderName],
+            [timestampFolderName]: files
+          }
+        } 
       }
     case ADD_FOLDER:
       return {
@@ -23,7 +29,7 @@ function fileSystem (state={}, action) {
         } 
       }
     case ADD_TIMESTAMP_FOLDER:
-      const { timestampFolderName } = action
+      //const { timestampFolderName } = action
       return {
         ...state,
         [folderName]: {
