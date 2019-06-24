@@ -60,4 +60,26 @@
   cursor: pointer;
 }
 
+.text-box-area {
+  display: inline;
+  /*box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 0 6px rgba(0,0,0,0.23);*/
+  width: 50%;
+  height: 15px;
+}
+
+.create-button{
+  background-color: #255;
+  border-radius: 25px;
+  border: none;
+  color: white;
+  padding: 3px 3px;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  margin: 0 auto;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+
 

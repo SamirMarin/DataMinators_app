@@ -9,8 +9,8 @@ import { connect } from 'react-redux'
 class Files extends Component {
   state = {
     files_object: this.props.files_object,
-    file: ""
-
+    file: "",
+    table_name: "",
   }
   componentDidMount() {
     this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)
@@ -54,12 +54,9 @@ class Files extends Component {
     }
   }
   onCheckbox = (file, prevFile) => {
-    this.checkOnlyOne(file, prevFile)
-    //this.unCheckOnlyOne(prevCheck)
-    //this.setState({
-    //  ...this.state,
-    //  ['file']: file
-    //})
+    if (!(file === prevFile)){
+      this.checkOnlyOne(file, prevFile)
+    }
   } 
   getFilesInFolder = (folderPath) => {
     if(folderPath){
@@ -76,6 +73,27 @@ class Files extends Component {
         }
       })
 
+    }
+  }
+  handleChangeInTableName = (table_name) => {
+    this.setState({
+      ...this.state,
+      ['table_name']: table_name
+    })
+  }
+  handleCreate = (path) => {
+    if(this.state.file === "") {
+      alert("Please select a file to load")
+    } else if(this.state.table_name === "") {
+      alert("Please provide a table name") 
+    } else {
+      api.loadTable(this.state.table_name, helpers.configurePath(path), this.state.file).then((successMessage) => {
+        if (successMessage.error){
+          alert("error loading table")
+        } else{
+          alert("success done loading")
+        }
+      })
     }
   }
   render() {
@@ -105,6 +123,14 @@ class Files extends Component {
                   </div>
                 </li>
               ))}
+              <textarea 
+                className="text-box-area"
+                placeholder="Table name"
+                onChange={(event) => this.handleChangeInTableName(event.target.value)}
+              />
+              <div className="create-button" onClick={() => this.handleCreate(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)}>
+                 Create 
+              </div>
             </ol>
             : <div 
               className="file-list"
