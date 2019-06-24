@@ -2,7 +2,8 @@ import { combineReducers } from 'redux'
 import {
   ADD_FILES,
   ADD_FOLDER,
-  ADD_TIMESTAMP_FOLDER
+  ADD_TIMESTAMP_FOLDER,
+  SWITCH_TIMESTAMP_FOLDER_SHOW
 } from '../actions'
 
 function fileSystem (state={}, action) {
@@ -16,7 +17,10 @@ function fileSystem (state={}, action) {
           ...state[folderName],
           [tenantFolderName]: {
             ...state[folderName][tenantFolderName],
-            [timestampFolderName]: files
+            [timestampFolderName]: { 
+              'files': files,
+              'show': false
+            }
           }
         } 
       }
@@ -36,7 +40,24 @@ function fileSystem (state={}, action) {
           ...state[folderName],
           [tenantFolderName]: {
             ...state[folderName][tenantFolderName],
-            [timestampFolderName]: []
+            [timestampFolderName]:{
+              'files': [],
+              'show': false
+            }
+          }
+        } 
+      }
+    case SWITCH_TIMESTAMP_FOLDER_SHOW:
+      return {
+        ...state,
+        [folderName]: {
+          ...state[folderName],
+          [tenantFolderName]: {
+            ...state[folderName][tenantFolderName],
+            [timestampFolderName]:{
+              ...state[folderName][tenantFolderName][timestampFolderName],
+              'show': !state[folderName][tenantFolderName][timestampFolderName]['show']
+            }
           }
         } 
       }

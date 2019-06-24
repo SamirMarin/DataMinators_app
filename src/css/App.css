@@ -53,6 +53,11 @@
   flex-wrap: none;
   float: left;
   display: inline;
+  text-align: left;
+}
+
+.show_pointer{
+  cursor: pointer;
 }
 
 

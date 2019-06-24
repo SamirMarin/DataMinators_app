@@ -2,13 +2,21 @@ import React, { Component } from 'react'
 import '../css/App.css'
 import * as helpers from '../utils/helpers'
 import * as api from '../utils/api'
-import { addFiles } from '../actions'
+import { addFiles, switchTimeStampFolderShow } from '../actions'
 import { connect } from 'react-redux'
 
 
 class Files extends Component {
+  state = {
+    files_object: this.props.files_object
+  }
   componentDidMount() {
-    //this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)
+    this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      files_object: this.props.files_object
+    })
   }
 
 
@@ -20,7 +28,7 @@ class Files extends Component {
         } else {
           this.props.addFiles({ 
             folderName: this.props.dataFolder,
-            tenantFolderName: this.props.tenantFolderName,
+            tenantFolderName: this.props.tenantDataFolder,
             timestampFolderName: this.props.timestampDataFolder,
             files: folder.files 
           })
@@ -31,19 +39,42 @@ class Files extends Component {
   }
   render() {
     return(
-      <div>
-        <ol className="file-list">
-          { this.props.files.map((file) => (
-            <li key={file}>
-              <div>
-                <div>
-                  {file}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
+      <div className="file-list">
+        {this.props.show_files && !(Object.keys(this.state.files_object).length === 0)
+            ? <ol className="file-list">
+              <div 
+                className="show_pointer"
+                onClick={() => {this.props.switchTimeStampFolderShow({
+                  folderName: this.props.dataFolder,
+                  tenantFolderName: this.props.tenantDataFolder,
+                  timestampFolderName: this.props.timestampDataFolder,
+                })}}
+              > x </div>
+              { this.props.files.map((file) => (
+                <li key={file} className="show_pointer">
+                  <div>
+                    <div>
+                      <input
+                        type="checkbox"
+                        checked={this.state.files_object[file]["checkbox"]}
+                      />
+                      {file}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            : <div 
+              className="file-list"
+              onClick={() => {this.props.switchTimeStampFolderShow({
+                folderName: this.props.dataFolder,
+                tenantFolderName: this.props.tenantDataFolder,
+                timestampFolderName: this.props.timestampDataFolder,
+              })}}
+            >
+              <div className="show_pointer"> > </div>
+            </div>}
+          </div>
     )
   }
 
@@ -53,6 +84,7 @@ class Files extends Component {
 function mapDispatchToProps( dispatch ) {
   return {
     addFiles: (data) => dispatch(addFiles(data)),
+    switchTimeStampFolderShow: (data) => dispatch(switchTimeStampFolderShow(data))
   }
 }
 
@@ -62,11 +94,18 @@ function mapStateToProps( { fileSystem }, props ) {
     props.tenantDataFolder in fileSystem[props.dataFolder] && 
     props.timestampDataFolder in fileSystem[props.dataFolder][props.tenantDataFolder]) {
     return {
-      files: fileSystem[props.dataFolder][props.tenantDataFolder][props.timestampDataFolder]
+      files: fileSystem[props.dataFolder][props.tenantDataFolder][props.timestampDataFolder]['files'],
+      files_object: fileSystem[props.dataFolder][props.tenantDataFolder][props.timestampDataFolder]['files'].reduce((files_obj, file) => {
+        files_obj[file] = { loaded: true, checkbox: "" }
+        return files_obj
+      }, {}),
+      show_files: fileSystem[props.dataFolder][props.tenantDataFolder][props.timestampDataFolder]['show']
     }
   } else {
     return {
-      files: []
+      files: [],
+      files_obj: {},
+      show_files: false
     }
   }
 }
