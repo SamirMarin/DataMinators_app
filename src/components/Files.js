@@ -13,13 +13,13 @@ class Files extends Component {
     table_name: "",
   }
   componentDidMount() {
-    this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)
+    //this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      ...this.state,
-      ['files_object']: this.props.files_object
-    })
+    //this.setState({
+    //  ...this.state,
+    //  ['files_object']: this.props.files_object
+    //})
   }
 
   checkOnlyOne = (file, prevFile) => {
@@ -70,9 +70,15 @@ class Files extends Component {
             timestampFolderName: this.props.timestampDataFolder,
             files: folder.files 
           })
+          this.setState({
+            ...this.state,
+            ['files_object']: folder.files.reduce((files_obj, file) => {
+              files_obj[file] = { loaded: true, checkbox: "" }
+              return files_obj
+            }, {})
+          })
         }
       })
-
     }
   }
   handleChangeInTableName = (table_name) => {
@@ -96,18 +102,31 @@ class Files extends Component {
       })
     }
   }
+  showFilesInFolder = () => {
+    if(Object.keys(this.state.files_object).length === 0) {
+      this.props.switchTimeStampFolderShow({
+        folderName: this.props.dataFolder,
+        tenantFolderName: this.props.tenantDataFolder,
+        timestampFolderName: this.props.timestampDataFolder,
+      }).then(() => this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder))
+      //this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)
+    } else {
+      this.props.switchTimeStampFolderShow({
+        folderName: this.props.dataFolder,
+        tenantFolderName: this.props.tenantDataFolder,
+        timestampFolderName: this.props.timestampDataFolder,
+      })
+    }
+}
+  
   render() {
     return(
       <div className="file-list">
-        {this.props.show_files && !(Object.keys(this.state.files_object).length === 0)
+        {this.props.show_files //&& !(Object.keys(this.state.files_object).length === 0)
             ? <ol className="file-list">
               <div 
                 className="show_pointer"
-                onClick={() => {this.props.switchTimeStampFolderShow({
-                  folderName: this.props.dataFolder,
-                  tenantFolderName: this.props.tenantDataFolder,
-                  timestampFolderName: this.props.timestampDataFolder,
-                })}}
+                onClick={() => this.showFilesInFolder()}
               > x </div>
               { this.props.files.map((file) => (
                 <li key={file} className="show_pointer">
@@ -115,7 +134,7 @@ class Files extends Component {
                     <div>
                       <input
                         type="checkbox"
-                        checked={this.state.files_object[file]["checkbox"]}
+                        checked={file in this.state.files_object ? this.state.files_object[file]["checkbox"]: ""}
                         onChange= {() => this.onCheckbox(file, this.state.file) }
                       />
                       {file}
@@ -134,11 +153,7 @@ class Files extends Component {
             </ol>
             : <div 
               className="file-list"
-              onClick={() => {this.props.switchTimeStampFolderShow({
-                folderName: this.props.dataFolder,
-                tenantFolderName: this.props.tenantDataFolder,
-                timestampFolderName: this.props.timestampDataFolder,
-              })}}
+              onClick={() => this.showFilesInFolder()}
             >
               <div className="show_pointer"> > </div>
             </div>}
@@ -152,7 +167,11 @@ class Files extends Component {
 function mapDispatchToProps( dispatch ) {
   return {
     addFiles: (data) => dispatch(addFiles(data)),
-    switchTimeStampFolderShow: (data) => dispatch(switchTimeStampFolderShow(data))
+    switchTimeStampFolderShow: (data) => {return new Promise((resolve, reject) => {
+      dispatch(switchTimeStampFolderShow(data))
+      resolve()
+    })
+    }
   }
 }
 

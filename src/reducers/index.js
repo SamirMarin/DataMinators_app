@@ -19,7 +19,7 @@ function fileSystem (state={}, action) {
             ...state[folderName][tenantFolderName],
             [timestampFolderName]: { 
               'files': files,
-              'show': false
+              'show': state[folderName][tenantFolderName][timestampFolderName]['show']
             }
           }
         } 
