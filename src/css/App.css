@@ -1,0 +1,85 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  height: 40px;
+  padding:20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+  vertical-align: middle;
+}
+.App-title-link {
+  color: white;
+  text-decoration: none;
+}
+
+.folder-container{
+  text-align: center;
+}
+
+.maindata-folder{
+  padding: 30px;
+}
+.esldata-button{
+  background-color: #222;
+  border-radius: 25px;
+  border: none;
+  color: white;
+  padding: 5px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0 auto;
+  font-size: 25px;
+}
+
+.folders-grid {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.file-list{
+  font-size: 12px;
+  flex-wrap: none;
+  float: left;
+  display: inline;
+  text-align: left;
+}
+
+.show_pointer{
+  cursor: pointer;
+}
+
+.text-box-area {
+  display: inline;
+  /*box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 0 6px rgba(0,0,0,0.23);*/
+  width: 50%;
+  height: 15px;
+}
+
+.create-button{
+  background-color: #255;
+  border-radius: 25px;
+  border: none;
+  color: white;
+  padding: 3px 3px;
+  text-align: center;
+  text-decoration: none;
+  display: inline;
+  margin: 0 auto;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+
+
