@@ -8,18 +8,59 @@ import { connect } from 'react-redux'
 
 class Files extends Component {
   state = {
-    files_object: this.props.files_object
+    files_object: this.props.files_object,
+    file: ""
+
   }
   componentDidMount() {
     this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
-      files_object: this.props.files_object
+      ...this.state,
+      ['files_object']: this.props.files_object
     })
   }
 
-
+  checkOnlyOne = (file, prevFile) => {
+    this.setState({
+      ...this.state,
+      ['files_object']:{
+        ...this.state['files_object'],
+        [file]:{
+          ...this.state['files_object'][file],
+          ["checkbox"]: "checked"
+        },
+        [prevFile]:{
+          ...this.state['files_object'][prevFile],
+          ["checkbox"]: ""
+        }
+      },
+      ['file']: file
+    })
+  }
+  unCheckOnlyOne = (file) => {
+    if (!(file === "")){
+      this.setState({
+        ...this.state,
+        ['files_object']:{
+          ...this.state['files_object'],
+          [file]:{
+            ...this.state['files_object'][file],
+            ["checkbox"]: ""
+          }
+        }
+    })
+    }
+  }
+  onCheckbox = (file, prevFile) => {
+    this.checkOnlyOne(file, prevFile)
+    //this.unCheckOnlyOne(prevCheck)
+    //this.setState({
+    //  ...this.state,
+    //  ['file']: file
+    //})
+  } 
   getFilesInFolder = (folderPath) => {
     if(folderPath){
       api.getFilePaths(helpers.configurePath(folderPath)).then((folder) => {
@@ -57,6 +98,7 @@ class Files extends Component {
                       <input
                         type="checkbox"
                         checked={this.state.files_object[file]["checkbox"]}
+                        onChange= {() => this.onCheckbox(file, this.state.file) }
                       />
                       {file}
                     </div>
