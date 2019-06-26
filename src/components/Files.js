@@ -73,7 +73,7 @@ class Files extends Component {
           this.setState({
             ...this.state,
             ['files_object']: folder.files.reduce((files_obj, file) => {
-              files_obj[file] = { loaded: true, checkbox: "" }
+              files_obj[file] = { loaded: false, checkbox: "" }
               return files_obj
             }, {})
           })
@@ -98,6 +98,16 @@ class Files extends Component {
           alert("error loading table")
         } else{
           alert("success done loading")
+          this.setState({
+            ...this.state,
+            ['files_object']:{
+              ...this.state['files_object'],
+              [this.state.file]: {
+                ...this.state['files_object'][this.state.file],
+                ['loaded']: true
+              }
+            }
+          })
         }
       })
     }
@@ -131,7 +141,7 @@ class Files extends Component {
               { this.props.files.map((file) => (
                 <li key={file} className="show_pointer">
                   <div>
-                    <div>
+                    <div className={file in this.state.files_object && this.state.files_object[file]["loaded"] ? "highlight": ""}>
                       <input
                         type="checkbox"
                         checked={file in this.state.files_object ? this.state.files_object[file]["checkbox"]: ""}
