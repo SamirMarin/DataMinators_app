@@ -68,7 +68,7 @@
 }
 
 .create-button{
-  background-color: #255;
+  background-color: #085294;
   border-radius: 25px;
   border: none;
   color: white;
@@ -81,5 +81,13 @@
   cursor: pointer;
 }
 
+.loading {
+  align-self: center;
+  margin: 0 auto;
+}
+
+.highlight {
+  background-color: #38761d;
+}
 
 

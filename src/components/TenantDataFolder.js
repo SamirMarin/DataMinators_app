@@ -6,10 +6,11 @@ import { addTimeStampFolder, addFiles, switchTimeStampFolderShow } from '../acti
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import  Files from './Files'
+import Loading from 'react-loading'
 
 class TenantDataFolder extends Component {
   state = {
-    show_files: false
+    num_folders: 0
   }
   componentDidMount() {
     this.getTimeStampFolders(this.props.dataFolder + "/" + this.props.tenantDataFolder)
@@ -21,6 +22,10 @@ class TenantDataFolder extends Component {
         if (folders.error){
           alert("Error getting folders")
         } else {
+          this.setState({
+            ...this.state,
+            ['num_folders']: folders.dir.length
+          })
           for (var i = 0, len = folders.dir.length; i < len; i++) {
             this.props.addTimeStampFolder({ folderName: this.props.dataFolder, tenantFolderName: this.props.tenantDataFolder, timestampFolderName: folders.dir[i] })
           }
@@ -54,26 +59,30 @@ class TenantDataFolder extends Component {
   render() {
     return (
       <div>
-        <ol className="folders-grid">
-          { this.props.dataFolders.map((folder) => (
-            <li key={folder}>
-              <div className="maindata-folder">
-                <div 
-                  className="esldata-button"
-                >
-                  <div>
-                    {folder}
+        {this.state.num_folders > 0 && this.props.dataFolders.length === this.state.num_folders
+            ? <ol className="folders-grid">
+              { this.props.dataFolders.map((folder) => (
+                <li key={folder}>
+                  <div className="maindata-folder">
+                    <div 
+                      className="esldata-button"
+                    >
+                      <div>
+                        {folder}
+                      </div>
+                      <Files
+                        dataFolder={this.props.dataFolder}
+                        tenantDataFolder={this.props.tenantDataFolder}
+                        timestampDataFolder={folder}
+                      />
+                    </div>
                   </div>
-                  <Files
-                    dataFolder={this.props.dataFolder}
-                    tenantDataFolder={this.props.tenantDataFolder}
-                    timestampDataFolder={folder}
-                  />
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
+                </li>
+              ))}
+            </ol>
+            : <div>
+              <Loading type={"bubbles"} color={"#222"} className='loading'/>
+            </div>}
       </div>
     )
   }
