@@ -152,13 +152,20 @@ class Files extends Component {
                   </div>
                 </li>
               ))}
-              <textarea 
-                className="text-box-area"
-                placeholder="Table name"
-                onChange={(event) => this.handleChangeInTableName(event.target.value)}
-              />
-              <div className="create-button" onClick={() => this.handleCreate(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)}>
-                 Create 
+              <div className="file_options_container" >
+                <textarea 
+                  className="text-box-area"
+                  placeholder="Table name"
+                  onChange={(event) => this.handleChangeInTableName(event.target.value)}
+                />
+                <select name="delimiter">
+                  <option value="comma">comma</option>
+                  <option value="pipe">pipe</option>
+                  <option value="tab">tab</option>
+                </select>
+                <div className="create-button" onClick={() => this.handleCreate(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)}>
+                  Create 
+                </div>
               </div>
             </ol>
             : <div 

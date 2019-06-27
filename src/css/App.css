@@ -90,4 +90,6 @@
   background-color: #38761d;
 }
 
-
+.file_options_container{
+  display: flex
+}
