@@ -14,6 +14,11 @@ export const loadTable = (tableName, path, file) =>
     .then(res => res.json())
     .then(data => data)
 
+export const loadTableWithDelimiter = (tableName, path, file, delimiter) =>
+  fetch(`${api}/loadTableWithDelimiter/${tableName}/${path}/${file}/${delimiter}`, { headers })
+    .then(res => res.json())
+    .then(data => data)
+
 export const getFolders = (path) =>
   fetch(`${api}/foldersPath/${path}`, { headers })
     .then(res => res.json())

@@ -11,6 +11,7 @@ class Files extends Component {
     files_object: this.props.files_object,
     file: "",
     table_name: "",
+    delimiter: "comma",
   }
   componentDidMount() {
     //this.getFilesInFolder(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)
@@ -57,18 +58,18 @@ class Files extends Component {
     if (!(file === prevFile)){
       this.checkOnlyOne(file, prevFile)
     }
-  } 
+  }
   getFilesInFolder = (folderPath) => {
     if(folderPath){
       api.getFilePaths(helpers.configurePath(folderPath)).then((folder) => {
         if (folder.error){
           alert("Error getting Files")
         } else {
-          this.props.addFiles({ 
+          this.props.addFiles({
             folderName: this.props.dataFolder,
             tenantFolderName: this.props.tenantDataFolder,
             timestampFolderName: this.props.timestampDataFolder,
-            files: folder.files 
+            files: folder.files
           })
           this.setState({
             ...this.state,
@@ -91,9 +92,9 @@ class Files extends Component {
     if(this.state.file === "") {
       alert("Please select a file to load")
     } else if(this.state.table_name === "") {
-      alert("Please provide a table name") 
+      alert("Please provide a table name")
     } else {
-      api.loadTable(this.state.table_name, helpers.configurePath(path), this.state.file).then((successMessage) => {
+      api.loadTableWithDelimiter(this.state.table_name, helpers.configurePath(path), this.state.file, this.state.delimiter).then((successMessage) => {
         if (successMessage.error){
           alert("error loading table")
         } else{
@@ -128,13 +129,21 @@ class Files extends Component {
       })
     }
 }
-  
+
+handleChangeInDelimiter = (delimiter_type) => {
+  this.setState({
+    ...this.state,
+    ['delimiter']: delimiter_type
+  })
+}
+
+
   render() {
     return(
       <div className="file-list">
         {this.props.show_files //&& !(Object.keys(this.state.files_object).length === 0)
             ? <ol className="file-list">
-              <div 
+              <div
                 className="show_pointer"
                 onClick={() => this.showFilesInFolder()}
               > x </div>
@@ -153,22 +162,24 @@ class Files extends Component {
                 </li>
               ))}
               <div className="file_options_container" >
-                <textarea 
+                <textarea
                   className="text-box-area"
                   placeholder="Table name"
                   onChange={(event) => this.handleChangeInTableName(event.target.value)}
                 />
-                <select name="delimiter">
+                <select name="delimiter"
+                  onChange={(event) => this.handleChangeInDelimiter(event.target.value)}
+                >
                   <option value="comma">comma</option>
                   <option value="pipe">pipe</option>
                   <option value="tab">tab</option>
                 </select>
                 <div className="create-button" onClick={() => this.handleCreate(this.props.dataFolder + "/" + this.props.tenantDataFolder + "/" + this.props.timestampDataFolder)}>
-                  Create 
+                  Create
                 </div>
               </div>
             </ol>
-            : <div 
+            : <div
               className="file-list"
               onClick={() => this.showFilesInFolder()}
             >
@@ -193,9 +204,9 @@ function mapDispatchToProps( dispatch ) {
 }
 
 function mapStateToProps( { fileSystem }, props ) {
-  if (props.dataFolder && 
-    (props.dataFolder in fileSystem) && 
-    props.tenantDataFolder in fileSystem[props.dataFolder] && 
+  if (props.dataFolder &&
+    (props.dataFolder in fileSystem) &&
+    props.tenantDataFolder in fileSystem[props.dataFolder] &&
     props.timestampDataFolder in fileSystem[props.dataFolder][props.tenantDataFolder]) {
     return {
       files: fileSystem[props.dataFolder][props.tenantDataFolder][props.timestampDataFolder]['files'],
