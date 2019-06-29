@@ -3,7 +3,8 @@ import {
   ADD_FILES,
   ADD_FOLDER,
   ADD_TIMESTAMP_FOLDER,
-  SWITCH_TIMESTAMP_FOLDER_SHOW
+  SWITCH_TIMESTAMP_FOLDER_SHOW,
+  TABLE_CREATE
 } from '../actions'
 
 function fileSystem (state={}, action) {
@@ -79,6 +80,20 @@ function folders (state={}, action) {
   }
 }
 
+function loading (state={ table_creating: false }, action) {
+  switch (action.type) {
+    case TABLE_CREATE:
+      const { tableCreating } = action
+      return {
+        ...state,
+        ['table_creating']: tableCreating
+      }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   fileSystem,
+  loading,
 })
