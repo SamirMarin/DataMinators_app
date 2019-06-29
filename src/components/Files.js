@@ -155,7 +155,7 @@ handleChangeInDelimiter = (delimiter_type) => {
                   { this.props.loading_table && this.state.file === file
                       ? <div>
                         <div> loading {this.state.file} into {this.state.table_name} </div>
-                        <Loading type={"bubbles"} color={"#FFFFFF"} className='loading'/>
+                        <Loading type={"bars"} color={"#FFFFFF"} className='loading'/>
                       </div>
                       : <li key={file} className="show_pointer">
                         <div>
