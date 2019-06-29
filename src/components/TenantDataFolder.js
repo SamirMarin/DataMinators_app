@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../css/App.css';
 import * as helpers from '../utils/helpers'
 import * as api from '../utils/api'
-import { addTimeStampFolder, addFiles, switchTimeStampFolderShow } from '../actions'
+import { addTimeStampFolder, addFiles, switchTimeStampFolderShow, addFolder } from '../actions'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import  Files from './Files'
@@ -26,9 +26,11 @@ class TenantDataFolder extends Component {
             ...this.state,
             ['num_folders']: folders.dir.length
           })
-          for (var i = 0, len = folders.dir.length; i < len; i++) {
-            this.props.addTimeStampFolder({ folderName: this.props.dataFolder, tenantFolderName: this.props.tenantDataFolder, timestampFolderName: folders.dir[i] })
-          }
+          this.props.addFolder({ folderName: this.props.dataFolder, tenantDataFolder: this.props.tenantDataFolder }).then(() => {
+            for (var i = 0, len = folders.dir.length; i < len; i++) {
+              this.props.addTimeStampFolder({ folderName: this.props.dataFolder, tenantFolderName: this.props.tenantDataFolder, timestampFolderName: folders.dir[i] })
+            }
+          })
         }
       })
     }
@@ -92,7 +94,13 @@ function mapDispatchToProps( dispatch ) {
   return {
     addTimeStampFolder: (data) => dispatch(addTimeStampFolder(data)),
     addFiles: (data) => dispatch(addFiles(data)),
-    switchTimeStampFolderShow: (data) => dispatch(switchTimeStampFolderShow(data))
+    switchTimeStampFolderShow: (data) => dispatch(switchTimeStampFolderShow(data)),
+    addFolder: (data) => {
+      return new Promise((resolve, reject) => {
+        dispatch(addFolder(data))
+        resolve()
+      })
+    }
   }
 }
 
