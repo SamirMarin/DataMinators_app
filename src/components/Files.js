@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import '../css/App.css'
 import * as helpers from '../utils/helpers'
 import * as api from '../utils/api'
-import { addFiles, switchTimeStampFolderShow } from '../actions'
+import { addFiles, switchTimeStampFolderShow, createTable } from '../actions'
 import { connect } from 'react-redux'
+import Loading from 'react-loading'
 
 
 class Files extends Component {
@@ -94,9 +95,11 @@ class Files extends Component {
     } else if(this.state.table_name === "") {
       alert("Please provide a table name")
     } else {
+      this.props.createTable({ tableCreating: true})
       api.loadTableWithDelimiter(this.state.table_name, helpers.configurePath(path), this.state.file, this.state.delimiter).then((successMessage) => {
-        if (successMessage.error){
-          alert("error loading table")
+        this.props.createTable({ tableCreating: false})
+        if (!successMessage.success){
+          alert(successMessage.message)
         } else{
           alert("success done loading")
           this.setState({
@@ -148,18 +151,26 @@ handleChangeInDelimiter = (delimiter_type) => {
                 onClick={() => this.showFilesInFolder()}
               > x </div>
               { this.props.files.map((file) => (
-                <li key={file} className="show_pointer">
-                  <div>
-                    <div className={file in this.state.files_object && this.state.files_object[file]["loaded"] ? "highlight": ""}>
-                      <input
-                        type="checkbox"
-                        checked={file in this.state.files_object ? this.state.files_object[file]["checkbox"]: ""}
-                        onChange= {() => this.onCheckbox(file, this.state.file) }
-                      />
-                      {file}
-                    </div>
-                  </div>
-                </li>
+                <div>
+                  { this.props.loading_table && this.state.file === file
+                      ? <div>
+                        <div> loading {this.state.file} into {this.state.table_name} </div>
+                        <Loading type={"bubbles"} color={"#FFFFFF"} className='loading'/>
+                      </div>
+                      : <li key={file} className="show_pointer">
+                        <div>
+                          <div className={file in this.state.files_object && this.state.files_object[file]["loaded"] ? "highlight": ""}>
+                            <input
+                              type="checkbox"
+                              checked={file in this.state.files_object ? this.state.files_object[file]["checkbox"]: ""}
+                              onChange= {() => this.onCheckbox(file, this.state.file) }
+                            />
+                            {file}
+                          </div>
+                        </div>
+                      </li>
+                  }
+              </div>
               ))}
               <div className="file_options_container" >
                 <textarea
@@ -199,11 +210,12 @@ function mapDispatchToProps( dispatch ) {
       dispatch(switchTimeStampFolderShow(data))
       resolve()
     })
-    }
+    },
+    createTable: (data) => dispatch(createTable(data)),
   }
 }
 
-function mapStateToProps( { fileSystem }, props ) {
+function mapStateToProps( { fileSystem, loading }, props ) {
   if (props.dataFolder &&
     (props.dataFolder in fileSystem) &&
     props.tenantDataFolder in fileSystem[props.dataFolder] &&
@@ -214,13 +226,15 @@ function mapStateToProps( { fileSystem }, props ) {
         files_obj[file] = { loaded: true, checkbox: "" }
         return files_obj
       }, {}),
-      show_files: fileSystem[props.dataFolder][props.tenantDataFolder][props.timestampDataFolder]['show']
+      show_files: fileSystem[props.dataFolder][props.tenantDataFolder][props.timestampDataFolder]['show'],
+      loading_table: loading['table_creating'] 
     }
   } else {
     return {
       files: [],
       files_obj: {},
-      show_files: false
+      show_files: false,
+      loading_table: loading['table_creating']
     }
   }
 }

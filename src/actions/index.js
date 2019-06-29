@@ -2,6 +2,7 @@ export const ADD_FILES = 'ADD_FILES'
 export const ADD_FOLDER = 'ADD_FOLDER'
 export const ADD_TIMESTAMP_FOLDER = 'ADD_TIMESTAMP_FOLDER'
 export const SWITCH_TIMESTAMP_FOLDER_SHOW = 'SWITCH_TIMESTAMP_FOLDER_SHOW'
+export const TABLE_CREATE = 'TABLE_CREATE'
 
 
 export function addFiles ({  folderName, tenantFolderName, timestampFolderName, files }) {
@@ -37,6 +38,13 @@ export function switchTimeStampFolderShow ( { folderName, tenantFolderName, time
     folderName,
     tenantFolderName,
     timestampFolderName,
+  }
+}
+
+export function createTable ({ tableCreating }) {
+  return {
+    type: TABLE_CREATE,
+    tableCreating,
   }
 }
 
